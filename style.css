@@ -1,0 +1,85 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: auto;
+  padding: 0;
+  background: #aaa;
+  font-family: wf_segoe-ui_normal,Segoe UI,Segoe WP,Tahoma,Arial,sans-serif;
+}
+
+.container {
+  max-width: 1200px; margin: auto;
+}
+
+header {
+  color: #fff;
+  background-color: #369;
+  padding: 30px 20px;
+  font-size: 20px;
+  font-family: wf_segoe-ui_light,Segoe UI Light,Segoe WP Light,Segoe UI,Segoe WP,Tahoma,Arial,sans-serif;
+}
+
+nav, footer {
+  background-color: #3c454f;
+  color: #fff;
+  padding: 20px 20px;
+  text-align: center;
+}
+
+nav a, footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+h1 {
+  margin: auto;
+  font-weight: 500;
+}
+
+.content {
+  background: #fff;
+  padding: 30px 20px 50px;
+}
+
+.content::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+#map {
+  width: 400px;
+  height: 350px;
+  max-width: 100%;
+}
+
+aside {
+  float: left;
+  padding: 15px;
+  width: 400px;
+}
+
+main {
+  float: left;
+  padding: 15px;
+  width: calc( 100% - 400px );
+}
+
+#form-container {
+  padding-bottom: 20px;
+}
+
+.bus-stop {
+  border-top: 1px solid #ccc;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.bus-stop h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+

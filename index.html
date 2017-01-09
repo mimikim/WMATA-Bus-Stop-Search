@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQh-30HD_gVRGtpVQSuKJe38_E4NUm56M&libraries=places&callback=initAutocomplete"></script>
+    <script src="wmata.js"></script>
+    <script type="text/javascript">
+        var autocomplete,
+            washingtondc = {lat: 38.9072, lng: -77.0369};
+
+        function initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            autocomplete = new google.maps.places.Autocomplete(
+                ( document.getElementById('address') ),
+                { types: ['geocode']}
+            );
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: washingtondc,
+                scrollwheel: false
+            });
+            var marker = new google.maps.Marker({
+                position: washingtondc,
+                map: map
+            });
+        }
+
+        window.onload = function() {
+
+            document.getElementById("submit").addEventListener("click", assembleData );
+
+            function assembleData(event) {
+                event.preventDefault();
+
+                document.getElementById("results").innerHTML = "";
+
+                var place = autocomplete.getPlace();
+                if( place != undefined ) {
+                    var addressData = {
+                        "Lat" : place.geometry.location.lat().toString(),
+                        "Lon" : place.geometry.location.lng().toString(),
+                        "Radius" : document.getElementById("radius").value
+                    };
+                    wmata.displayResults(addressData);
+
+                    document.getElementById('results-for').innerHTML = 'Results for ' + place.formatted_address;
+                }
+            }
+
+            // Bias the autocomplete object to the user's geographical location,
+            // as supplied by the browser's 'navigator.geolocation' object.
+            function geolocate() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        var geolocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        var circle = new google.maps.Circle({
+                            center: geolocation,
+                            radius: position.coords.accuracy
+                        });
+                        autocomplete.setBounds(circle.getBounds());
+                    });
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>
+            <img src="https://apimgmtstjtqflqnegmezxlj.blob.core.windows.net/content/MediaLibrary/Resources/wmata_logo.png" style="display: inline; vertical-align: middle; padding-right: 10px;"> WMATA Bus Stop Search
+        </h1>
+    </header>
+    <nav>
+        View Nearby Bus Stops | View Active Buses Nearby
+    </nav>
+    <div class="content">
+        <aside>
+            <div id="map"></div>
+
+            <h3>How Does It Work?:</h3>
+            <ul>
+                <li>Enter the Address of your Location</li>
+                <li>Select your Desired Search Radius (in Miles)</li>
+                <li>A List of Results will Display</li>
+                <li>Locations of the Bus Stops will be Marked on the Map</li>
+            </ul>
+        </aside>
+        <main>
+            <div id="form-container">
+                <form method="post">
+                    <div>
+                        <label for="address">Address</label>
+                        <input id="address" placeholder="Enter your address" onFocus="geolocate()" type="text" style="width:400px;">
+                    </div>
+                    <div>
+                        <label for="radius">Radius</label>
+                        <select id="radius">
+                            <option value="0.1">0.1 Miles</option>
+                            <option value="0.3">0.3 Mile</option>
+                            <option value="0.5">0.5 Miles</option>
+                            <option value="0.8">0.8 Miles</option>
+                            <option value="1">1 Mile</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Submit" id="submit">
+                </form>
+            </div>
+            <div id="results-for"></div>
+            <div id="results"></div>
+        </main>
+    </div>
+    <footer>
+        <a href="https://github.com/mimikim/WMATA-Bus-Stop-Search" target="_blank">See on Github</a>
+    </footer>
+</div>
+</body>
+</html>
